@@ -1,0 +1,37 @@
+{
+    "manifest_version": 2,
+
+    "name": "Funda Companion",
+    "description": "Enhances Funda's saved ads listing",
+    "version": "1.0.0",
+
+    "permissions": [
+        "storage"
+    ],
+
+    "content_scripts": [
+        {
+            "matches": ["*://www.funda.nl/mijn/bewaard/*"],
+
+            "css": [
+                "css/bewaard.css"
+            ],
+
+            "js": [
+                "js/lib/underscore-1.4.4.min.js",
+                "js/lib/jquery-2.0.0.min.js",
+                "js/lib/jade-0.30.0.min.js",
+                "js/common.js",
+                "js/FundaCompanion.UI.js",
+                "js/FundaCompanion.Parser.js",
+                "js/bewaard.js"
+            ],
+
+            "run_at": "document_start"
+        }
+    ],
+
+    "web_accessible_resources": [
+        "images/loader.gif"
+    ]
+}
