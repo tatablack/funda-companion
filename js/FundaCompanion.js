@@ -34,6 +34,6 @@ $(function() {
             return listing.selected === true;
         });
 
-        FundaCompanion.UI.showDetailMap(selectedListing);
+        FundaCompanion.UI.showMapComplete(listings);
     }
 });

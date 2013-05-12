@@ -18,9 +18,21 @@ FundaCompanion.UI = {
         }
     },
 
-    showDetailMap: function(selectedListing) {
+    showMapDetail: function(selectedListing) {
         $('#ext-map-detail')[0].contentWindow.postMessage(
-            { listing: selectedListing }, '*'
+            {
+                method: 'showMapDetail',
+                listing: selectedListing
+            }, '*'
+        )
+    },
+
+    showMapComplete: function(listings) {
+        $('#ext-map-detail')[0].contentWindow.postMessage(
+            {
+                method: 'showMapComplete',
+                listings: listings
+            }, '*'
         )
     }
 };

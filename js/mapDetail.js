@@ -1,7 +1,10 @@
-var template;
-
 $(function() {
     window.addEventListener("message", showMap, false);
+
+    var template,
+        mapOptions = {
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
 
     function showMap(event) {
         if (!template) {
@@ -14,24 +17,28 @@ $(function() {
             return;
         }
 
-        var listing = event.data.listing,
-            location = new google.maps.LatLng(
+        if (event.data.method === 'showMapDetail') {
+            showMapDetail(event.data.listing);
+        } else if (event.data.method === 'showMapComplete') {
+            showMapComplete(event.data.listings);
+        }
+    }
+
+    function showMapDetail(listing) {
+        var location = new google.maps.LatLng(
                 listing.coordinates.results[0].geometry.location.lat,
                 listing.coordinates.results[0].geometry.location.lng
             ),
             mapContainer = $('#map-detail');
 
-        var mapOptions = {
-            center: location,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
         mapContainer.prepend(template({ listing: listing }));
 
         var map = new google.maps.Map(
             mapContainer[0],
-            mapOptions
+            _.extend(mapOptions, {
+                center: location,
+                zoom: 15
+            })
         );
 
         var marker = new google.maps.Marker({
@@ -39,6 +46,35 @@ $(function() {
             map: map,
             title: listing.address
         });
+    }
+
+    function showMapComplete(listings) {
+        var bounds = new google.maps.LatLngBounds(),
+            mapContainer = $('#map-detail');
+
+        _.each(listings, function(listing) {
+            listing.latLng = new google.maps.LatLng(
+                listing.coordinates.results[0].geometry.location.lat,
+                listing.coordinates.results[0].geometry.location.lng
+            );
+
+            bounds.extend(listing.latLng);
+        })
+
+        var map = new google.maps.Map(
+            mapContainer[0],
+            mapOptions
+        );
+
+        var markers = _.map(listings, function(listing) {
+            return new google.maps.Marker({
+                position: listing.latLng,
+                map: map,
+                title: listing.address
+            });
+        });
+
+        map.fitBounds(bounds);
     }
 });
 
