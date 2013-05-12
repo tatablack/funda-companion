@@ -16,5 +16,11 @@ FundaCompanion.UI = {
         } else {
             loader.hide();
         }
+    },
+
+    showDetailMap: function(selectedListing) {
+        $('#ext-map-detail')[0].contentWindow.postMessage(
+            { listing: selectedListing }, '*'
+        )
     }
 };

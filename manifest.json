@@ -2,12 +2,14 @@
     "manifest_version": 2,
 
     "name": "Funda Companion",
-    "description": "Enhances Funda's saved ads listing",
+    "description": "Enhances Funda's saved ads listing.",
     "version": "1.0.0",
 
     "permissions": [
         "storage"
     ],
+
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.googleapis.com https://maps.gstatic.com; object-src 'self'",
 
     "content_scripts": [
         {
@@ -24,14 +26,24 @@
                 "js/common.js",
                 "js/FundaCompanion.UI.js",
                 "js/FundaCompanion.Parser.js",
-                "js/bewaard.js"
+                "js/FundaCompanion.js"
             ],
 
             "run_at": "document_start"
         }
     ],
 
+    "icons": {
+        "16": "images/icon16.png",
+        "48": "images/icon48-2.png",
+        "128": "images/icon128.png"
+    },
+
     "web_accessible_resources": [
-        "images/loader.gif"
+        "images/loader.gif",
+        "pages/mapDetail.html",
+        "css/mapDetail.css",
+        "templates/listing.jade",
+        "templates/detail.jade"
     ]
 }

@@ -1,0 +1,8 @@
+#ext-listings
+    each listing in listings
+        .listing-container
+            a.ext-address(href="#{listing.link}")
+                | #{listing.address}
+            .ext-location #{listing.location}
+            img.ext-thumbnail(src="#{listing.imageUrl}")
+            .ext-price #{listing.price}

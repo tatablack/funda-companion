@@ -1,0 +1,8 @@
+html, body {
+    height: 99%;
+}
+
+#map-detail {
+    width: 100%;
+    height: 100%;
+}

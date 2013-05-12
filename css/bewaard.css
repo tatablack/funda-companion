@@ -7,3 +7,44 @@
     display: block;
     margin: 0 auto;
 }
+
+#ext-listings {
+    float: left;
+    width: 20%;
+}
+
+#ext-detail {
+    float: left;
+    width: 20%;
+}
+
+.listing-container {
+    float: left;
+    width: 100%;
+    border-left: 2px solid #F3DB8E;
+    padding-left: 15px;
+    margin-bottom: 10px;
+}
+
+.ext-address {
+    display: block;
+    font-weight: bold;
+}
+
+.ext-location {
+    font-style: italic;
+}
+
+.ext-thumbnail {
+    display: block;
+    margin: 5px 0;
+}
+
+.ext-price {
+    font-size: 1.4em;
+}
+
+#ext-map-detail {
+    width: 75%;
+    min-height: 400px;
+}
