@@ -26,8 +26,8 @@ $(function() {
 
     function showMapDetail(listing) {
         var location = new google.maps.LatLng(
-                listing.coordinates.results[0].geometry.location.lat,
-                listing.coordinates.results[0].geometry.location.lng
+                listing.coordinates.lat,
+                listing.coordinates.lng
             ),
             mapContainer = $('#map-detail');
 
@@ -53,12 +53,16 @@ $(function() {
             mapContainer = $('#map-detail');
 
         _.each(listings, function(listing) {
-            listing.latLng = new google.maps.LatLng(
-                listing.coordinates.results[0].geometry.location.lat,
-                listing.coordinates.results[0].geometry.location.lng
-            );
+            if (listing.coordinates) {
+                listing.latLng = new google.maps.LatLng(
+                    listing.coordinates.lat,
+                    listing.coordinates.lng
+                );
 
-            bounds.extend(listing.latLng);
+                bounds.extend(listing.latLng);
+            } else {
+                console.warn('Missing coordinates for ' + listing.address);
+            }
         })
 
         var map = new google.maps.Map(
@@ -67,6 +71,8 @@ $(function() {
         );
 
         var markers = _.map(listings, function(listing) {
+            if (!listing.coordinates) return;
+
             return new google.maps.Marker({
                 position: listing.latLng,
                 map: map,

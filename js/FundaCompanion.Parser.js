@@ -1,11 +1,13 @@
 FundaCompanion.Parser = function() {
     var listingSelector = 'li.nvm',
+        usernameSelector = '#my-menu-button span',
         pageUrls = _.pluck($('.paging-list a[href!="#"]'), 'href');
 
     var parseListings = function(selector) {
         return _.map(selector, function(listing) {
             var $listing = $(listing);
             return {
+                id: $listing.attr('globalid'),
                 link: $listing.find('a').attr('href'),
                 imageUrl: $listing.find('img').attr('src'),
                 price: $listing.find('.price-wrapper').text(),
@@ -29,19 +31,38 @@ FundaCompanion.Parser = function() {
                     sensor: false
                 }
             }).done(function(coordinates) {
-                listing.coordinates = coordinates;
+                if (coordinates.status === 'OK') {
+                    listing.coordinates = coordinates.results[0].geometry.location;
+                } else {
+                    console.warn(coordinates.status);
+                }
             }).always(function() {
                 deferred.resolve();
             });
         };
 
-        return _.map(listings, function(listing) {
-            var result = $.Deferred();
+        return _.map(listings, function(listing, index) {
+            var result = $.Deferred(),
+                username = getUsername();
 
-            _.delay(getCoordinatesForListing, 110, listing, result);
+            chrome.storage.local.get(username, function(savedListings) {
+                var currentListing = _.find(savedListings[username], function(savedListing) {
+                    return savedListing.id === listing.id;
+                });
+
+                if (currentListing && currentListing.coordinates) {
+                    result.resolve();
+                } else {
+                    _.delay(getCoordinatesForListing, 200 * index, listing, result);
+                }
+            });
 
             return result.promise();
         })
+    };
+
+    var getUsername = function() {
+        return $(usernameSelector).text()
     };
 
     return {
@@ -66,6 +87,8 @@ FundaCompanion.Parser = function() {
             });
 
             return result.promise();
-        }
+        },
+
+        getUsername: getUsername
     }
 };
